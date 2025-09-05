@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คำนวณค่าน้ำค่าไฟ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>คำนวณค่าน้ำค่าไฟบ้าน AF</h1>
+
+<label>ค่าไฟ (บาท)
+  <input type="number" id="electric" placeholder="เช่น 1000">
+</label>
+
+<label>ค่าน้ำ (บาท)
+  <input type="number" id="water" placeholder="เช่น 200">
+</label>
+
+<label>จำนวนคนอื่น (ไม่รวมพิม+พร้าว)
+  <input type="number" id="others" value="3">
+</label>
+
+<button onclick="calc()">คำนวณ</button>
+
+<div class="result" id="output"></div>
+
+<script>
+function calc(){
+  const elec = parseFloat(document.getElementById('electric').value) || 0;
+  const water = parseFloat(document.getElementById('water').value) || 0;
+  const others = parseInt(document.getElementById('others').value) || 0;
+
+  const halfElec = elec * 0.5;             // พิม+พร้าว 50%
+  const elecPerOther = halfElec / (others || 1); // อีก 50% หารคนอื่น
+  const totalPeople = 2 + others;          // พิม+พร้าว 2 คน + คนอื่น
+  const waterPerPerson = totalPeople ? water / totalPeople : 0;
+
+  const pimPraoTotal = halfElec + (waterPerPerson * 2);
+  const otherTotal  = elecPerOther + waterPerPerson;
+
+  document.getElementById('output').innerHTML = `
+    <strong>ผลลัพธ์:</strong><br>
+    พิม+พร้าว จ่ายรวม <b>${pimPraoTotal.toFixed(2)}</b> บาท
+    (ไฟ ${halfElec.toFixed(2)} + น้ำ ${(waterPerPerson*2).toFixed(2)})<br>
+    คนอื่นแต่ละคน จ่าย <b>${otherTotal.toFixed(2)}</b> บาท
+    (ไฟ ${elecPerOther.toFixed(2)} + น้ำ ${waterPerPerson.toFixed(2)})
+  `;
+}
+</script>
+</body>
+</html>
